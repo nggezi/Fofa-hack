@@ -1,6 +1,10 @@
 name: Publish
 
-on: push
+on:
+  workflow_dispatch:        # ✅ 手动触发按钮
+  push:                     # ✅ 推 tag 自动触发
+    tags:
+      - "v*"
 
 jobs:
   build:
@@ -20,8 +24,8 @@ jobs:
     - name: Build wheels
       run: cibuildwheel --output-dir wheelhouse
       env:
-        CIBW_ARCHS_LINUX: "x86_64 aarch64"  # 👈 同时构建 amd64 和 arm64
-        CIBW_SKIP: "pp*"                    # 跳过 PyPy (可选)
+        CIBW_ARCHS_LINUX: "x86_64 aarch64"      # 同时构建 amd64 和 arm64
+        CIBW_SKIP: "pp*"                        # 跳过 PyPy (可选)
         CIBW_BUILD: "cp38-* cp39-* cp310-* cp311-*"  # 你支持的 Python 版本
 
     - name: Upload wheels as artifacts
