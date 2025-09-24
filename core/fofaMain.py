@@ -156,12 +156,12 @@ class FofaMain:
         :return:
         """
         searchbs64 = base64.b64encode(f'{search_key}'.encode()).decode()
-        print(colorize(_("[*] 爬取页面为:https://fofa.info/result?qbase64={}").format(searchbs64), "green"))
+        print(colorize(_("[*] 爬取页面为:https://fofa.so/result?qbase64={}").format(searchbs64), "green"))
         if config.AUTHORIZATION:
             return searchbs64, ""
         try:
 
-            html = requests.get(url="https://fofa.info/result?qbase64=" + searchbs64,
+            html = requests.get(url="https://fofa.so/result?qbase64=" + searchbs64,
                                 headers=fofaUseragent.getFofaPageNumHeaders(), timeout=self.timeout,
                                 proxies=self.get_proxy()) \
                 .text
