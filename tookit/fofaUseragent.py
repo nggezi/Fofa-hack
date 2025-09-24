@@ -82,7 +82,7 @@ def getCheckHeaders():
         'Sec-Fetch-Dest': 'document',
         'Sec-Fetch-Mode': 'navigate',
         'DNT': '1',
-        'Referer': 'https://fofa.info/',
+        'Referer': 'https://fofa.so/',
         'Connection': 'keep-alive',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
     }
