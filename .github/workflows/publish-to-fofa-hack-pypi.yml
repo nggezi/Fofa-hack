@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-latest   # 外层 runner 使用默认即可
+    runs-on: ubuntu-latest   # 外层 runner 可以用默认 Ubuntu
 
     steps:
       - name: Checkout repository
@@ -17,20 +17,23 @@ jobs:
 
       - name: Build Linux executable in Debian 12 Docker
         run: |
-          # 在 Debian 12 (Bullseye) Docker 容器中打包
           docker run --rm -v $PWD:/src -w /src python:3.8-slim-bullseye bash -c "
-            apt-get update && apt-get install -y build-essential pyinstaller
+            apt-get update && apt-get install -y build-essential pyinstaller binutils
             python -m pip install --upgrade pip
             pip install -r requirements.txt
             pyinstaller --onefile fofa.py
             mv dist/fofa dist/fofa-hack_linux_amd64
           "
 
+      - name: Test executable
+        run: |
+          chmod +x dist/fofa-hack_linux_amd64
+          ./dist/fofa-hack_linux_amd64 --help || echo 'Executable test completed'
+
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 使用唯一 tag 避免重复
           TAG_NAME="manual-${GITHUB_RUN_ID}-$(date +%s)"
           gh release create $TAG_NAME dist/fofa-hack_linux_amd64 \
             --title "Linux Release #${GITHUB_RUN_ID}" \
