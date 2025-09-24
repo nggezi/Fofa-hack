@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04   # 使用低版本 glibc 的系统
 
     steps:
       - name: Checkout repository
@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.8   # 确保 Python 版本与系统 glibc 兼容
 
       - name: Install dependencies
         run: |
