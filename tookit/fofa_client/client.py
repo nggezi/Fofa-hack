@@ -25,7 +25,7 @@ class Client:
 
     :param key: The Fofa api key. If not specified, it will be read from the FOFA_KEY environment variable.
     :type key: str
-    :param base_url: The base URL of the FOFA API. Defaults to 'https://fofa.info'.
+    :param base_url: The base URL of the FOFA API. Defaults to 'https://fofa.so'.
     :type base_url: str
     :param proxies:  A proxies array for the requests library, e.g. {'https': 'your proxy'}
     :type proxies: dict
@@ -39,7 +39,7 @@ class Client:
             key = os.environ.get('FOFA_KEY', '')
 
         if base_url == '':
-            base_url = os.environ.get('FOFA_BASE_URL', 'https://fofa.info')
+            base_url = os.environ.get('FOFA_BASE_URL', 'https://fofa.so')
 
         self.key = key
 
