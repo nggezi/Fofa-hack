@@ -59,14 +59,14 @@ def getUrl(qbase64):
     size = 50 if config.AUTHORIZATION else 20
     message = f'fullfalsepage1qbase64{qbase64}size{size}ts{ts}'
     sign = urllib.parse.quote(getSign(message))
-    url = f'https://api.fofa.info/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page=1&size={size}&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
+    url = f'https://api.fofa.so/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page=1&size={size}&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
     return url
 
 # def getPage2Url(qbase64,page):
 #     ts = int(time.time() * 1000)
 #     message = f'fullfalsepage{page}qbase64{qbase64}size10ts{ts}'
 #     sign = urllib.parse.quote(getSign(message))
-#     url = f'https://api.fofa.info/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page={page}&size=10&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
+#     url = f'https://api.fofa.so/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page={page}&size=10&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
 #     return url
 
 def getUrlTest(qbase64):
@@ -74,7 +74,7 @@ def getUrlTest(qbase64):
     size = 10 if config.AUTHORIZATION else 20
     message = f'fullfalsepage1qbase64{qbase64}size{size}ts{ts}'
     sign = urllib.parse.quote(getSign(message))
-    url = f'https://api.fofa.info/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page=1&size={size}&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
+    url = f'https://api.fofa.so/v1/search?qbase64={urllib.parse.quote(qbase64)}&full=false&page=1&size={size}&ts={ts}&sign={sign}&app_id=9e9fb94330d97833acfbc041ee1a76793f1bc691'
     return url
 
 
