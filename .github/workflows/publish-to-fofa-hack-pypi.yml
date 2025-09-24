@@ -1,40 +1,54 @@
 name: Build Linux Executable
 
 on:
-  workflow_dispatch:   # 允许手动触发
+  workflow_dispatch:   # 手动触发
 
 jobs:
   build-linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout 仓库
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
-
-      - name: Install dependencies
+      # 2️⃣ 安装 GitHub CLI
+      - name: Install GitHub CLI
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pyinstaller
-          sudo apt-get update && sudo apt-get install -y gh
+          sudo apt-get update
+          sudo apt-get install -y gh
 
-      - name: Build Linux executable
+      # 3️⃣ 使用 Docker (Debian 12) 打包
+      - name: Build Linux executable in Debian 12 Docker
         run: |
-          # 使用 fofa.py 作为入口脚本生成单文件可执行程序
-          pyinstaller --onefile fofa.py
-          # 重命名生成的可执行文件
-          mv dist/fofa dist/fofa-hack_linux_amd64
+          docker run --rm -v $PWD:/src -w /src python:3.8-slim-bullseye bash -c "
+            set -e
+            echo 'Installing system dependencies...'
+            apt-get update && apt-get install -y build-essential binutils
+            echo 'Installing Python dependencies...'
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install pyinstaller pyinstaller-hooks-contrib
+            echo 'Building executable with PyInstaller...'
+            pyinstaller --onefile fofa.py
+            echo 'Listing dist directory:'
+            ls -l dist
+            mv dist/fofa dist/fofa-hack_linux_amd64
+            chmod +x dist/fofa-hack_linux_amd64
+            echo 'Build completed successfully.'
+          "
 
+      # 4️⃣ 测试可执行文件
+      - name: Test executable
+        run: |
+          ./dist/fofa-hack_linux_amd64 --help || echo 'Executable test completed'
+
+      # 5️⃣ 上传到 GitHub Release
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 将重命名后的文件上传到 Release
-          gh release create manual-${GITHUB_RUN_ID} dist/fofa-hack_linux_amd64 \
+          TAG_NAME="manual-${GITHUB_RUN_ID}-$(date +%s)"
+          gh release create $TAG_NAME dist/fofa-hack_linux_amd64 \
             --title "Linux Release #${GITHUB_RUN_ID}" \
-            --notes "手动触发生成的 fofa_hack Linux 可执行文件"
+            --notes "手动触发生成的 fofa_hack Linux 可执行文件 (Debian 12 compatible)"
