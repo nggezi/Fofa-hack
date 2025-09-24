@@ -30,17 +30,17 @@ if getattr(sys, 'frozen', None):
     dir = sys._MEIPASS
 else:
     dir = config.ROOT_PATH
-# 获取当前的语言设置
-lang, _ = locale.getdefaultlocale()
-if lang.startswith('zh'):
-    # 如果是中文环境，不需要翻译，直接用原始字符串
-    _ = lambda x: x
-else:
-    # 如果是其他语言环境，则加载对应的翻译文件
-    language = gettext.translation('fofa_hack', localedir=os.path.join(dir, "locale"), languages=['en'])
-    language.install()
-    _ = language.gettext
-
+# # 获取当前的语言设置
+# lang, _ = locale.getdefaultlocale()
+# if lang.startswith('zh'):
+#     # 如果是中文环境，不需要翻译，直接用原始字符串
+#     _ = lambda x: x
+# else:
+#     # 如果是其他语言环境，则加载对应的翻译文件
+#     language = gettext.translation('fofa_hack', localedir=os.path.join(dir, "locale"), languages=['en'])
+#     language.install()
+#     _ = language.gettext
+_ = lambda x: x
 
 class FofaMain:
     '''
