@@ -1,7 +1,7 @@
 name: Build Linux Executable
 
 on:
-  workflow_dispatch:   # 允许在 GitHub Actions 页面手动触发
+  workflow_dispatch:   # 允许手动触发
 
 jobs:
   build-linux:
@@ -21,20 +21,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pyinstaller
+          sudo apt-get update && sudo apt-get install -y gh
 
       - name: Build Linux executable
         run: |
           # 使用 fofa.py 作为入口脚本生成单文件可执行程序
           pyinstaller --onefile fofa.py
-          # 打包成 zip，名字带程序名
-          zip -r fofa_hack-linux.zip dist/fofa
 
       - name: Create GitHub Release
-        uses: ncipollo/release-action@v1
-        with:
-          # 每次手动触发都会生成唯一 tag
-          tag: manual-${{ github.run_id }}
-          name: "Linux Release #${{ github.run_id }}"
-          body: "手动触发生成的 fofa_hack Linux 可执行文件"
-          files: |
-            fofa_hack-linux.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 将 dist/fofa 直接上传到 Release
+          gh release create manual-${GITHUB_RUN_ID} dist/fofa \
+            --title "Linux Release #${GITHUB_RUN_ID}" \
+            --notes "手动触发生成的 fofa_hack Linux 可执行文件"
